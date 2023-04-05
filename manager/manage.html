@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .button {
+            border: none;
+            color: white;
+            padding: 15px 32px 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+       .buttonup {
+            background-color: #4CAF50;
+            margin: auto;
+            width: 100%;
+            /* display: block; */
+        }
+        
+        .buttonleft {
+            background-color: #4CAF50;
+            margin: auto;
+            width: 100%;
+            grid-row-start: auto;
+            /* float: left; */
+        }
+        .buttondown {
+            background-color: #4CAF50;
+            margin: auto;
+            width: 100%;
+            /* display: block; */
+        }
+        .buttonright {
+            background-color: #4CAF50;
+            margin:  auto;
+            width: 100%;
+            /* display: block; */
+        }       
+
+        
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        const serverip="http://192.168.106.80:4000/";
+        const socket = io(serverip);
+        window.addEventListener('keydown', logKey);  
+        function a(){document.getElementById("left").style.background = "#4CAF50";}     
+        function b(){document.getElementById("up").style.background = "#4CAF50";}
+        function c(){document.getElementById("down").style.background = "#4CAF50";}
+        function d(){document.getElementById("right").style.background = "#4CAF50";} 
+        function logKey(e) {
+            var showstr="";var keypressed=5;var tmid=0;
+            switch(e.code){
+                case 'KeyA':
+                    showstr="Left Direction";keypressed=1;
+                    document.getElementById("left").style.background = "blue";
+                    tmid=setTimeout(a, 200);
+                    break;
+                case 'KeyW':
+                    showstr = "Up Direction";keypressed=0;
+                    document.getElementById("up").style.background = "blue";
+                    tmid=setTimeout(b, 200);
+                    break;
+                case 'KeyS':
+                    showstr = "Down Direction";keypressed=2;
+                    document.getElementById("down").style.background = "blue";
+                    tmid=setTimeout(c, 200);
+                    break;
+                case 'KeyD':
+                    showstr = "Right Direction";keypressed=3;
+                    document.getElementById("right").style.background = "blue";
+                    tmid=setTimeout(d, 200);                    
+                    break;
+            }
+            // clearTimeout(tmid);
+            socket.emit('ctrl', keypressed);
+            console.log(showstr);
+            document.getElementById("log").innerHTML=showstr;
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Remote control panel.</h1>
+    
+        <table>
+            <tr>
+                <td></td>
+                <td><button id="up" class="button buttonup">Up</button></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><button id="left" class="button buttonleft">Left</button></td>
+                <td></td>
+                <td><button id="right" class="button buttonright">Right</button></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button id="down" class="button  buttondown">Down</button> </td>
+                <td></td>
+            </tr>
+        </table>
+        
+                
+     
+
+    <p>If you click "a,w,s,d", button will be clicked.</p>
+    <p id="log"></p>
+</body>
+
+</html>
